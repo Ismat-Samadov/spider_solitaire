@@ -37,12 +37,6 @@ export default function Header() {
               Tövsiyələr
             </Link>
             <Link
-              href="/chatbot"
-              className="text-earth-600 hover:text-leaf-600 font-medium transition-colors"
-            >
-              Chatbot
-            </Link>
-            <Link
               href="/farm"
               className="text-earth-600 hover:text-leaf-600 font-medium transition-colors"
             >
@@ -85,13 +79,6 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Tövsiyələr
-            </Link>
-            <Link
-              href="/chatbot"
-              className="block px-4 py-2 text-earth-600 hover:bg-leaf-50 rounded-lg font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Chatbot
             </Link>
             <Link
               href="/farm"

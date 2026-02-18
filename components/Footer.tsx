@@ -36,11 +36,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/chatbot" className="text-earth-600 hover:text-leaf-600 text-sm transition-colors">
-                  Chatbot
-                </Link>
-              </li>
-              <li>
                 <Link href="/farm" className="text-earth-600 hover:text-leaf-600 text-sm transition-colors">
                   Fermam
                 </Link>
