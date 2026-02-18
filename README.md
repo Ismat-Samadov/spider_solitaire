@@ -1,356 +1,486 @@
-# Agricultural Advisory System
+# AgriAdvisor Frontend
 
-**Rule-Based Decision Support Platform for Modern Farming Operations**
+**Azərbaycan kənd təsərrüfatı üçün qayda əsaslı məsləhət sisteminin Next.js frontend interfeysi**
 
-[![Backend](https://img.shields.io/badge/Backend-Live-success)](https://rule-based-system.onrender.com)
-[![API Docs](https://img.shields.io/badge/API-Docs-blue)](https://rule-based-system.onrender.com/docs)
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.3-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 
 ## 📑 Table of Contents
 
-- [Overview](#overview)
-- [Problem Domain](#problem-domain)
-- [System Capabilities](#system-capabilities)
-- [Architecture](#architecture)
-- [Deployment Guide](#deployment-guide)
-- [API Reference](#api-reference)
-- [Project Structure](#project-structure)
-- [Local Development](#local-development)
-- [Configuration](#configuration)
+- [🚀 Quick Start](#-quick-start)
+- [🏗️ Architecture Diagrams](#️-architecture-diagrams)
+  - [Component Hierarchy](#component-hierarchy)
+  - [User Flow - Recommendation Wizard](#user-flow---recommendation-wizard)
+  - [Page Structure & Routing](#page-structure--routing)
+- [📁 Struktur](#-struktur)
+- [🎨 Design System](#-design-system)
+  - [Rənglər](#rənglər)
+  - [Komponentlər](#komponentlər)
+  - [Design System Visual](#design-system-visual)
+- [🔗 API Connection](#-api-connection)
+  - [Environment Variables](#environment-variables)
+  - [Weather Auto-Fetch Feature](#weather-auto-fetch-feature)
+- [📱 Səhifələr](#-səhifələr)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🚀 Production Deployment](#-production-deployment)
 
 ---
 
-## Overview
+## 🚀 Quick Start
 
-This platform provides intelligent, data-driven agricultural recommendations through a sophisticated rule-based expert system. Designed for farming operations requiring actionable guidance on irrigation, fertilization, pest management, and resource optimization, the system evaluates real-time environmental conditions against a comprehensive knowledge base of agricultural best practices.
+```bash
+# Install dependencies
+npm install
 
-### System Statistics
+# Run development server
+npm run dev
 
+# Build for production
+npm run build
+npm start
 ```
-127 Decision Rules | 5 Farm Types | 5 Climate Zones | Bilingual Support
-```
 
-| Metric | Value |
-|--------|-------|
-| **Decision Rules** | 127 domain-specific rules |
-| **Farm Types Supported** | Cereals, Livestock, Orchards, Vegetables, Mixed Operations |
-| **Climate Zones** | 5 distinct agricultural regions |
-| **API Endpoints** | 22 REST endpoints |
-| **AI Capabilities** | Conversational assistant with 20+ agricultural intents |
-| **Language Support** | Azerbaijani (primary) + English |
+Server: http://localhost:3000
 
 ---
 
-## Problem Domain
+## 🏗️ Architecture Diagrams
 
-### Agricultural Challenge
-
-Modern farming requires timely, precise decision-making across multiple variables:
-- Environmental conditions (temperature, humidity, rainfall)
-- Soil characteristics (moisture, pH, nutrients)
-- Crop/livestock growth stages and health indicators
-- Resource availability and allocation priorities
-- Regional climate patterns and seasonal variations
-
-**Gap**: Farmers often lack access to real-time, contextual advisory services that synthesize complex agricultural knowledge into actionable daily recommendations.
-
-### Solution Approach
-
-This system addresses the advisory gap through:
-
-1. **Expert Knowledge Codification**: 127 agricultural rules capturing domain expertise across crop science, livestock management, and integrated farming practices
-2. **Real-Time Decision Engine**: Context-aware evaluation of current conditions against best practices
-3. **Priority-Based Recommendations**: Urgency scoring (0-100) to triage critical vs. routine actions
-4. **Multi-Farm Support**: Specialized rule sets for wheat/cereals (31 rules), livestock (22 rules), orchards (26 rules), vegetables (31 rules), and mixed operations (17 rules)
-5. **Bilingual Accessibility**: Native Azerbaijani support with English translation for broader reach
-
----
-
-## System Capabilities
-
-### Core Features
-
-#### 1. Rule-Based Recommendation Engine
-- **127 Decision Rules** organized by farm type and operational category
-- **Condition Evaluation**: Supports complex AND/OR logic with nested conditions
-- **Urgency Scoring**: 0-100 scale for prioritization (Critical: 90-100, High: 70-89, Medium: 40-69, Low: 0-39)
-- **Daily Scheduling**: Generates time-slotted task schedules based on optimal agricultural practices
-- **Multi-Language**: Azerbaijani and English message templating
-
-#### 2. Environmental Integration
-- **Auto-Location Detection**: IP-based geolocation for frictionless onboarding
-- **Weather Data Retrieval**: Real-time temperature, humidity, rainfall, wind speed
-- **Regional Mapping**: Automatically maps user location to relevant climate zone
-- **Frost Warnings**: Temperature-based alerts for sensitive crops
-
-#### 3. AI-Powered Assistance
-- **Conversational Interface**: Google Gemini-powered chatbot for natural language queries
-- **Session Management**: Context-aware conversations with history tracking
-- **Smart Suggestions**: Keyword-based quick replies for common follow-up questions
-- **Agricultural Expertise**: Trained on farming terminology and practical advice
-
-#### 4. Farm Type Coverage
-
-| Farm Type | Rule Categories | Example Use Cases |
-|-----------|----------------|-------------------|
-| **Wheat/Cereals** | Irrigation (11), Fertilization (6), Pest/Disease (7), Harvest (7) | Optimal irrigation timing during heading stage, nitrogen deficiency detection |
-| **Livestock** | Disease Risk (7), Feeding (7), Veterinary (8) | Heat stress monitoring, vaccination schedules, feed optimization |
-| **Orchards** | Irrigation (7), Fertilization (6), Pruning (6), Pest/Disease (7) | Tree age-specific pruning, fruit-specific pest management |
-| **Vegetables** | Irrigation (8), Fertilization (7), Greenhouse (8), Pest/Disease (8) | Greenhouse climate control, hydration monitoring, disease prevention |
-| **Mixed Operations** | Integration (5), Resource Allocation (5), Daily Coordination (7) | Cross-operation resource sharing, integrated pest management |
-
-#### 5. Regional Climate Adaptation
-
-The system supports five distinct agricultural climate zones:
-
-- **Semi-Arid** - Hot, dry climate requiring intensive irrigation management
-- **Subtropical** - High humidity with disease pressure and pest challenges
-- **Temperate Mountain** - Moderate climate ideal for fruit orchards
-- **Continental Dry** - Low rainfall zones requiring water conservation strategies
-- **Alpine** - High-altitude, short growing season with frost risk
-
----
-
-## Architecture
-
-### System Design
+### Component Hierarchy
 
 ```mermaid
 graph TB
-    subgraph "Client Layer"
-        A[User Interface]
-        B[Next.js 14 Application]
-        C[Responsive UI Components]
+    subgraph "App Router Structure"
+        Layout[layout.tsx - Root Layout]
+
+        subgraph "Pages"
+            Home[page.tsx - Landing]
+            Rec[recommendations/page.tsx]
+            Farm[farm/page.tsx]
+            Chat[chatbot/page.tsx]
+        end
     end
 
-    subgraph "API Gateway"
-        D[TypeScript API Client]
-        E[Weather Auto-Fetch]
-        F[Recommendation Wizard]
-        G[Chatbot Interface]
+    subgraph "Shared Components"
+        Header[Header.tsx]
+        Footer[Footer.tsx]
     end
 
-    subgraph "Backend Services"
-        H[FastAPI REST Server]
-        I[Rule Evaluation Engine]
-        J[AI Conversational Agent]
-        K[Weather Integration Service]
+    subgraph "Recommendation Components"
+        FTC[FarmTypeCard.tsx]
+        WI[WeatherInput.tsx]
+        RC[RecommendationCard.tsx]
+        DS[DailySchedule.tsx]
+        CW[ChatWidget.tsx]
     end
 
-    subgraph "Knowledge Base"
-        L[(Decision Rules Database)]
-        M[(Threshold Constants)]
-        N[(Farm Type Profiles)]
-        O[(Regional Climate Data)]
+    subgraph "API Layer"
+        API[lib/api.ts]
+        Types[lib/types.ts]
     end
 
-    subgraph "External Services"
-        P[Google Gemini AI API]
-        Q[Open-Meteo Weather API]
-        R[IP Geolocation Service]
+    subgraph "Styling"
+        Tailwind[tailwind.config.js]
+        Globals[globals.css]
     end
 
-    A --> B --> D
-    D --> E --> K
-    D --> F --> H --> I
-    D --> G --> J --> P
+    Layout --> Header
+    Layout --> Footer
+    Layout --> Home
+    Layout --> Rec
+    Layout --> Farm
+    Layout --> Chat
 
-    I --> L
-    I --> M
-    I --> N
-    I --> O
+    Home --> FTC
+    Rec --> WI
+    Rec --> FTC
+    Rec --> RC
+    Rec --> DS
+    Rec --> CW
 
-    K --> Q
-    K --> R
+    Rec --> API
+    Farm --> API
+    Chat --> API
 
-    style H fill:#fff59d
-    style I fill:#ffccbc
-    style L fill:#d1c4e9
-    style P fill:#ffab91
+    API --> Types
+
+    Layout --> Tailwind
+    Layout --> Globals
+
+    style Layout fill:#c8e6c9
+    style Rec fill:#fff59d
+    style API fill:#ffccbc
+    style Tailwind fill:#ce93d8
 ```
 
-### Data Flow: Recommendation Generation
+### User Flow - Recommendation Wizard
 
 ```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant API
-    participant RuleEngine
-    participant KnowledgeBase
-    participant AI
+stateDiagram-v2
+    [*] --> Landing: User visits site
 
-    User->>Frontend: Enter farm parameters
-    Frontend->>Frontend: Auto-fetch weather?
-    alt Weather auto-fetch enabled
-        Frontend->>API: GET /api/v1/weather/auto
-        API->>API: Detect IP location
-        API->>API: Fetch current weather
-        API-->>Frontend: Weather + region data
-    end
+    Landing --> Step1: Click "Tövsiyə Al"
 
-    User->>Frontend: Submit recommendation request
-    Frontend->>API: POST /api/v1/recommendations
+    state Step1 {
+        [*] --> SelectFarm: Choose Farm Type
+        SelectFarm --> ValidateFarm: Wheat/Livestock/Orchard/Vegetable/Mixed
+        ValidateFarm --> [*]: Next
+    }
 
-    API->>RuleEngine: Initialize evaluation
-    RuleEngine->>KnowledgeBase: Load farm-specific rules
-    KnowledgeBase-->>RuleEngine: 127 rules (filtered by type)
+    Step1 --> Step2: Farm selected
 
-    RuleEngine->>RuleEngine: Build context from input
-    RuleEngine->>RuleEngine: Evaluate conditions (AND/OR)
-    RuleEngine->>RuleEngine: Match applicable rules
-    RuleEngine->>RuleEngine: Calculate urgency scores
-    RuleEngine->>RuleEngine: Group by priority
-    RuleEngine->>RuleEngine: Generate daily schedule
-    RuleEngine->>RuleEngine: Create summary
+    state Step2 {
+        [*] --> AutoFetch: Option: Auto-fetch weather
+        AutoFetch --> WeatherForm: Manual or auto-filled
+        WeatherForm --> EnterWeather: Temperature, Humidity, Rainfall
+        EnterWeather --> EnterSoil: Soil Moisture, pH
+        EnterSoil --> [*]: Next
+    }
 
-    RuleEngine-->>API: Structured recommendations
-    API-->>Frontend: JSON response
-    Frontend->>Frontend: Render priority cards
-    Frontend->>Frontend: Display schedule
-    Frontend-->>User: Show recommendations
+    Step2 --> Step3: Weather entered
 
-    opt User asks follow-up question
-        User->>Frontend: Type question
-        Frontend->>API: POST /api/v1/chat/message
-        API->>AI: Send with agricultural context
-        AI-->>API: Generated response
-        API->>API: Add quick replies
-        API-->>Frontend: Response + suggestions
-        Frontend-->>User: Display chat message
-    end
+    state Step3 {
+        [*] --> CropDetails: If Crop Farm
+        [*] --> LivestockDetails: If Livestock Farm
+        [*] --> MixedDetails: If Mixed Farm
+
+        CropDetails --> CropType: Select crop
+        CropType --> GrowthStage: Select stage
+        GrowthStage --> DaysInput: Days since irrigation/fertilization
+        DaysInput --> [*]: Submit
+
+        LivestockDetails --> AnimalType: Select animal
+        AnimalType --> HealthStatus: Health metrics
+        HealthStatus --> [*]: Submit
+
+        MixedDetails --> Components: Select farm components
+        Components --> Resources: Resource availability
+        Resources --> [*]: Submit
+    }
+
+    Step3 --> Processing: Submit request
+
+    state Processing {
+        [*] --> CallAPI: POST /api/v1/recommendations
+        CallAPI --> RuleEngine: Backend processes
+        RuleEngine --> Response: Recommendations generated
+        Response --> [*]
+    }
+
+    Processing --> Step4: Results ready
+
+    state Step4 {
+        [*] --> DisplayCritical: Critical alerts (red)
+        DisplayCritical --> DisplayHigh: High priority (orange)
+        DisplayHigh --> DisplayMedium: Medium priority (yellow)
+        DisplayMedium --> DisplayLow: Low priority (blue)
+        DisplayLow --> ShowSchedule: Daily schedule
+        ShowSchedule --> ShowSummary: Summary message
+        ShowSummary --> [*]
+    }
+
+    Step4 --> ChatOption: User can ask questions
+
+    state ChatOption {
+        [*] --> OpenChatbot
+        OpenChatbot --> AskQuestion: Azerbaijani question
+        AskQuestion --> AIResponse: Gemini AI responds
+        AIResponse --> QuickReplies: Quick reply buttons
+        QuickReplies --> [*]
+    }
+
+    ChatOption --> Step4: Continue viewing
+    Step4 --> Step1: Start over
+
+    Step4 --> [*]: Exit
 ```
 
-### Technology Stack
-
-**Backend** (Python/FastAPI):
-- FastAPI 0.109.0 - High-performance async REST API framework
-- Pydantic 2.5.3 - Data validation and settings management
-- httpx 0.26.0 - Async HTTP client for external services
-- google-generativeai - Gemini AI integration
-- Uvicorn 0.27.0 - ASGI server
-- gunicorn 21.2.0 - Production WSGI server
-
-**Frontend** (TypeScript/Next.js):
-- Next.js 14.2.18 - React framework with App Router
-- TypeScript 5 - Type-safe JavaScript
-- TailwindCSS 3.3.0 - Utility-first CSS framework
-- Lucide React 0.263.1 - Icon library
-- Framer Motion 10.16.16 - Animation library
-- React Markdown 10.1.0 - Markdown rendering
-
-**External APIs**:
-- Google Generative AI (Gemini Flash) - Conversational intelligence
-- Open-Meteo API - Weather data (free, no authentication)
-- ipapi.co - IP geolocation (free tier)
-
----
-
-## Deployment Guide
-
-### Production Architecture
+### Page Structure & Routing
 
 ```mermaid
 graph LR
-    subgraph "Version Control"
-        A[Git Repository]
+    subgraph "Routes"
+        R1[/ - Landing Page]
+        R2[/recommendations - Wizard]
+        R3[/farm - Farm Profile]
+        R4[/chatbot - AI Chat]
     end
 
-    subgraph "Backend - Docker Container"
-        B[Render.com Service]
-        C[FastAPI Application]
-        D[Rule Engine Runtime]
-        E[Environment Config]
+    subgraph "Landing Components"
+        Hero[Hero Section]
+        Features[Features Grid]
+        FarmTypes[Farm Type Cards]
+        CTA[Call to Action]
     end
 
-    subgraph "Frontend - Edge Network"
-        F[Vercel Platform]
-        G[Static Assets]
-        H[Server Components]
-        I[Client Hydration]
+    subgraph "Wizard Steps"
+        S1[Step 1: Farm Type]
+        S2[Step 2: Weather & Soil]
+        S3[Step 3: Details]
+        S4[Step 4: Results]
     end
 
-    subgraph "Third-Party Services"
-        J[Gemini AI API]
-        K[Weather Data API]
-        L[Geolocation API]
+    subgraph "Backend API Calls"
+        A1[GET /api/v1/farms]
+        A2[GET /api/v1/weather/auto]
+        A3[POST /api/v1/recommendations]
+        A4[POST /api/v1/chat/message]
     end
 
-    A -->|Auto Deploy| B
-    A -->|Auto Deploy| F
+    R1 --> Hero
+    R1 --> Features
+    R1 --> FarmTypes
+    R1 --> CTA
 
-    B --> C --> D
-    E --> C
+    R2 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
 
-    F --> G --> H --> I
+    S1 --> A1
+    S2 --> A2
+    S3 --> A3
+    R4 --> A4
 
-    C --> J
-    C --> K
-    C --> L
-
-    I --> C
-
-    style C fill:#fff59d
-    style H fill:#80deea
-    style J fill:#ffab91
-```
-
-### Backend Deployment (Render)
-
-#### Step 1: Create Web Service
-
-1. Navigate to [Render Dashboard](https://dashboard.render.com/)
-2. **New** → **Web Service**
-3. Connect your Git repository
-4. Configuration:
-   - **Name**: `agricultural-advisory-api` (or your choice)
-   - **Root Directory**: `backend`
-   - **Environment**: Docker
-   - **Region**: Select closest to your users
-   - **Plan**: Free tier (for testing) or Starter ($7/month for production)
-
-#### Step 2: Configure Environment Variables
-
-| Variable | Value | Required | Description |
-|----------|-------|----------|-------------|
-| `GEMINI_API_KEY` | `AIzaSy...` | **Yes** | Google Gemini API key from [AI Studio](https://aistudio.google.com/app/apikey) |
-| `CORS_ORIGINS` | `https://your-frontend.vercel.app` | **Yes** | Allowed frontend origins (comma-separated) |
-| `DEBUG` | `False` | No | Production mode (default: False) |
-
-**Critical**: The chatbot will not function without `GEMINI_API_KEY`. Obtain a free API key from Google AI Studio.
-
-#### Step 3: Deploy
-
-- Click **Create Web Service**
-- Build time: 5-10 minutes (first deployment)
-- Your API URL: `https://your-service-name.onrender.com`
-
-#### Step 4: Verify Deployment
-
-```bash
-# Health check
-curl https://your-api-url.onrender.com/health
-
-# System statistics
-curl https://your-api-url.onrender.com/api/v1/stats
-
-# API documentation
-# Visit: https://your-api-url.onrender.com/docs
+    style R1 fill:#c8e6c9
+    style R2 fill:#fff59d
+    style R3 fill:#ce93d8
+    style R4 fill:#f8bbd0
+    style A3 fill:#ffab91
+    style A4 fill:#90caf9
 ```
 
 ---
 
-### Frontend Deployment (Vercel)
+## 📁 Struktur
 
-#### Option A: Vercel CLI
+```
+frontend/
+├── app/
+│   ├── layout.tsx           # Root layout
+│   ├── page.tsx             # Landing page
+│   ├── globals.css          # Global styles
+│   ├── recommendations/
+│   │   └── page.tsx         # Recommendations wizard
+│   └── farm/
+│       └── page.tsx         # Farm profile
+├── components/
+│   ├── Header.tsx           # Navigation header
+│   ├── Footer.tsx           # Footer
+│   ├── FarmTypeCard.tsx     # Farm type selector
+│   ├── WeatherInput.tsx     # Weather input form
+│   ├── RecommendationCard.tsx # Recommendation display
+│   └── DailySchedule.tsx    # Daily schedule view
+├── lib/
+│   └── api.ts               # API client & types
+├── tailwind.config.js       # Tailwind configuration
+└── package.json
+```
+
+## 🎨 Design System
+
+### Rənglər
+- **Leaf** (Yaşıl): Primary, success states
+- **Earth** (Torpaq): Neutral, backgrounds
+- **Wheat** (Sarı): Accent, medium priority
+- **Sky** (Mavi): Info, low priority
+- **Danger** (Qırmızı): Critical alerts
+
+### Komponentlər
+- `.card` - Basic card
+- `.card-hover` - Card with hover effect
+- `.btn-primary` - Primary button (green)
+- `.btn-secondary` - Secondary button (neutral)
+- `.btn-danger` - Danger button (red)
+- `.input` - Text input
+- `.select` - Select dropdown
+- `.badge-*` - Status badges (critical, high, medium, low, info)
+
+### Design System Visual
+
+```mermaid
+graph TB
+    subgraph "Color Palette"
+        subgraph "Leaf - Primary"
+            L1[leaf-50: #f0fdf4]
+            L2[leaf-100: #dcfce7]
+            L3[leaf-600: #16a34a]
+            L4[leaf-700: #15803d]
+        end
+
+        subgraph "Earth - Neutral"
+            E1[earth-50: #fafaf9]
+            E2[earth-100: #f5f5f4]
+            E3[earth-600: #57534e]
+            E4[earth-900: #1c1917]
+        end
+
+        subgraph "Wheat - Accent"
+            W1[wheat-50: #fefce8]
+            W2[wheat-400: #facc15]
+            W3[wheat-600: #ca8a04]
+        end
+
+        subgraph "Danger - Critical"
+            D1[danger-50: #fef2f2]
+            D2[danger-400: #f87171]
+            D3[danger-600: #dc2626]
+        end
+
+        subgraph "Sky - Info"
+            S1[sky-50: #f0f9ff]
+            S2[sky-400: #38bdf8]
+            S3[sky-600: #0284c7]
+        end
+    end
+
+    subgraph "Component Classes"
+        subgraph "Buttons"
+            B1[.btn-primary]
+            B2[.btn-secondary]
+            B3[.btn-danger]
+        end
+
+        subgraph "Cards"
+            C1[.card]
+            C2[.card-hover]
+        end
+
+        subgraph "Badges"
+            Badge1[.badge-critical]
+            Badge2[.badge-high]
+            Badge3[.badge-medium]
+            Badge4[.badge-low]
+            Badge5[.badge-info]
+        end
+
+        subgraph "Forms"
+            F1[.input]
+            F2[.select]
+        end
+    end
+
+    L3 --> B1
+    E3 --> B2
+    D3 --> B3
+
+    L1 --> C1
+    L2 --> C2
+
+    D2 --> Badge1
+    W2 --> Badge2
+    W3 --> Badge3
+    S2 --> Badge4
+    E2 --> Badge5
+
+    L1 --> F1
+    L1 --> F2
+
+    style L3 fill:#16a34a,color:#fff
+    style E3 fill:#57534e,color:#fff
+    style W2 fill:#facc15
+    style D2 fill:#f87171
+    style S2 fill:#38bdf8
+```
+
+## 🔗 API Connection
+
+### Environment Variables
+
+**Required**:
+- `NEXT_PUBLIC_API_URL`: Backend API URL
+  - Local: `http://localhost:8000`
+  - Production: `https://your-backend.onrender.com`
+
+**Setup**:
+```bash
+# For local development
+cp .env.local.example .env.local
+# Edit .env.local and set NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# For production (Vercel)
+# Set NEXT_PUBLIC_API_URL in Vercel Dashboard → Settings → Environment Variables
+```
+
+The Next.js config includes a proxy rewrite to forward `/api/v1/*` requests to the backend.
+
+⚠️ **Important**: All frontend environment variables MUST be prefixed with `NEXT_PUBLIC_` to be accessible in the browser.
+
+### Weather Auto-Fetch Feature
+
+**Architecture**: Backend-First (Security Best Practice)
+
+```
+User Browser → Frontend → Backend API → External APIs
+                                      ↓
+                               (IP Geolocation + Weather Data)
+```
+
+**Why Backend-First?**
+- ✅ No API endpoints exposed to browser
+- ✅ Backend controls rate limiting and caching
+- ✅ Better security (no API keys in frontend code)
+- ✅ Graceful fallback to manual input if auto-fetch fails
+
+**Usage in Code**:
+```typescript
+import { autoFetchWeather } from '@/lib/api';
+
+// Call backend endpoint to auto-fetch weather
+const result = await autoFetchWeather();
+// Backend handles IP detection and weather API calls
+```
+
+**User Flow**:
+1. User clicks "Avtomatik Al" button in recommendations page
+2. Frontend calls `/api/v1/weather/auto` endpoint
+3. Backend detects user's location from IP address
+4. Backend fetches weather data from Open-Meteo API
+5. Backend maps location to Azerbaijan region
+6. Frontend receives complete weather data and auto-fills the form
+7. If auto-fetch fails, user can manually enter weather data (fallback)
+
+## 📱 Səhifələr
+
+### Ana Səhifə (`/`)
+- Hero section
+- Features overview
+- Farm types
+- CTA
+
+### Tövsiyələr (`/recommendations`)
+4 addımlı wizard:
+1. Ferma tipi seçimi
+2. Hava şəraiti
+3. Əlavə detallar
+4. Nəticələr
+
+### Ferma Profili (`/farm`)
+- Ferma məlumatlarını saxlama
+- LocalStorage-də saxlanılır
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Language**: TypeScript
+- **Animations**: Framer Motion
+- **Markdown**: React Markdown + Remark GFM
+
+---
+
+## 🚀 Production Deployment
+
+### Deploy to Vercel (Recommended)
+
+#### Option 1: Vercel CLI
 
 ```bash
-# Install Vercel CLI
-npm install -g vercel
+# Install Vercel CLI globally
+npm i -g vercel
 
 # Navigate to frontend directory
 cd frontend
@@ -359,536 +489,80 @@ cd frontend
 vercel --prod
 ```
 
-#### Option B: Vercel Dashboard
+#### Option 2: Vercel Dashboard
 
-1. Go to [Vercel](https://vercel.com)
-2. **Import Project** → Select your Git repository
-3. Configuration:
-   - **Framework**: Next.js (auto-detected)
+1. Visit [Vercel](https://vercel.com)
+2. Click **"New Project"**
+3. Import your GitHub repository
+4. Configure:
+   - **Framework Preset**: Next.js
    - **Root Directory**: `frontend`
-   - **Build Command**: `npm run build` (default)
-   - **Output Directory**: `.next` (default)
-4. **Environment Variables**:
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `.next`
+5. Add Environment Variable:
    - **Key**: `NEXT_PUBLIC_API_URL`
-   - **Value**: `https://your-api-url.onrender.com`
-5. **Deploy**
+   - **Value**: `https://rule-based-system.onrender.com` (or your backend URL)
+6. Click **Deploy**
 
-**Important**: Redeploy frontend after changing environment variables.
+#### Post-Deployment
 
-#### Post-Deployment: Update CORS
+After deploying, update the backend CORS settings:
 
-Return to Render backend dashboard and update `CORS_ORIGINS`:
+1. Go to your Render backend dashboard
+2. Navigate to **Environment Variables**
+3. Update `CORS_ORIGINS` to include your Vercel URL:
+   ```
+   CORS_ORIGINS=https://your-app.vercel.app
+   ```
+4. Backend will automatically redeploy
 
-```
-CORS_ORIGINS=https://your-frontend-url.vercel.app
-```
+### Deploy to Other Platforms
 
-This allows the frontend to make cross-origin requests to the backend.
-
----
-
-## API Reference
-
-### Base URL
-
-```
-Production: https://rule-based-system.onrender.com
-Local:      http://localhost:8000
-```
-
-### Authentication
-
-No authentication required (public API).
-
-### Endpoints Overview
-
-| Category | Endpoints | Description |
-|----------|-----------|-------------|
-| **Recommendations** | `POST /api/v1/recommendations`<br>`GET /api/v1/recommendations/quick` | Generate detailed recommendations based on farm parameters |
-| **Weather** | `GET /api/v1/weather/auto` | Auto-fetch weather by IP geolocation |
-| **Farms** | `GET /api/v1/farms`<br>`GET /api/v1/farms/{type}/profile` | List farm types and retrieve profiles |
-| **Rules** | `GET /api/v1/rules`<br>`GET /api/v1/rules/search`<br>`GET /api/v1/rules/{type}/{category}` | Browse and search decision rules |
-| **Constants** | `GET /api/v1/constants`<br>`GET /api/v1/constants/thresholds`<br>`GET /api/v1/constants/regions` | Retrieve threshold values and regional data |
-| **Chatbot** | `POST /api/v1/chat/message`<br>`POST /api/v1/chat/reset`<br>`GET /api/v1/chat/stats` | AI-powered conversational assistance |
-| **System** | `GET /`<br>`GET /health`<br>`GET /api/v1/stats` | Service health and statistics |
-
-### Key Endpoint Examples
-
-#### 1. Generate Recommendations
-
-**Request**:
-```http
-POST /api/v1/recommendations
-Content-Type: application/json
-
-{
-  "farm_type": "wheat",
-  "region": "aran",
-  "weather": {
-    "temperature": 35,
-    "humidity": 80,
-    "rainfall_last_24h": 0
-  },
-  "soil": {
-    "soil_moisture": 45
-  },
-  "crop_context": {
-    "crop_type": "wheat",
-    "stage": "heading",
-    "days_since_irrigation": 5,
-    "days_since_fertilization": 25
-  }
-}
-```
-
-**Response**:
-```json
-{
-  "farm_type": "wheat",
-  "region": "aran",
-  "response_date": "2025-01-02",
-  "generated_at": "2025-01-02T10:15:30.123456",
-  "critical_alerts": [
-    {
-      "rule_id": "WHT_IRR_001",
-      "name_en": "Critical temperature irrigation",
-      "category": "irrigation",
-      "urgency": "critical",
-      "urgency_score": 100,
-      "message_en": "URGENT: Temperature 35.0°C is critical for wheat. Immediate irrigation required.",
-      "action_type": "irrigate",
-      "timing_en": "Immediate - morning 05:00-07:00 or evening 19:00-21:00"
-    }
-  ],
-  "high_priority": [...],
-  "medium_priority": [],
-  "low_priority": [],
-  "daily_schedule": [
-    {
-      "time_slot": "05:00-07:00",
-      "task_en": "Critical temperature irrigation",
-      "priority": "must_do",
-      "related_rule_id": "WHT_IRR_001",
-      "urgency_score": 100
-    }
-  ],
-  "total_recommendations": 3,
-  "summary_en": "⚠️ ATTENTION: 2 critical alerts! Immediate action required."
-}
-```
-
-#### 2. Auto-Fetch Weather
-
-**Request**:
-```http
-GET /api/v1/weather/auto
-```
-
-**Response**:
-```json
-{
-  "temperature": 8,
-  "humidity": 63,
-  "rainfall_last_24h": 0,
-  "wind_speed": 26,
-  "frost_warning": false,
-  "location": {
-    "city": "Baku",
-    "country": "Azerbaijan",
-    "region": "Absheron",
-    "latitude": 40.4093,
-    "longitude": 49.8671
-  },
-  "region": "aran"
-}
-```
-
-**Architecture Note**: Weather auto-fetch uses a backend-first approach for security:
-- No API keys exposed to frontend
-- Centralized rate limiting and caching
-- Graceful fallback to manual input
-
-#### 3. System Statistics
-
-**Request**:
-```http
-GET /api/v1/stats
-```
-
-**Response**:
-```json
-{
-  "total_rules": 127,
-  "rules_by_farm_type": {
-    "wheat": 31,
-    "livestock": 22,
-    "orchard": 26,
-    "vegetable": 31,
-    "mixed": 17
-  },
-  "farm_types_count": 5,
-  "regions_count": 5,
-  "rule_categories": {
-    "wheat": ["irrigation", "fertilization", "pest_disease", "harvest"],
-    "livestock": ["disease_risk", "feeding", "veterinary"],
-    "orchard": ["irrigation", "fertilization", "pruning", "pest_disease"],
-    "vegetable": ["irrigation", "fertilization", "greenhouse", "pest_disease"],
-    "mixed": ["integration", "resource_allocation", "daily_coordination"]
-  }
-}
-```
-
-**Full API Documentation**: Visit `/docs` endpoint for interactive Swagger UI.
-
----
-
-## Project Structure
-
-```
-agricultural-advisory-system/
-├── backend/                      # Python FastAPI backend
-│   ├── app/
-│   │   ├── api/                 # REST API endpoints
-│   │   │   └── routes.py        # 22 endpoint handlers
-│   │   ├── chatbot/             # AI conversational agent
-│   │   │   ├── routes.py        # Chat endpoints
-│   │   │   └── gemini_engine.py # Gemini integration
-│   │   ├── core/                # Configuration management
-│   │   │   └── config.py        # Environment settings
-│   │   ├── data/                # Knowledge base (JSON)
-│   │   │   ├── constants/       # Threshold values, regions, stages
-│   │   │   ├── profiles/        # Farm type profiles (5 files)
-│   │   │   └── rules/           # Decision rules by farm type
-│   │   │       ├── wheat/       # 31 rules (4 categories)
-│   │   │       ├── livestock/   # 22 rules (3 categories)
-│   │   │       ├── orchard/     # 26 rules (4 categories)
-│   │   │       ├── vegetable/   # 31 rules (4 categories)
-│   │   │       └── mixed/       # 17 rules (3 categories)
-│   │   ├── models/              # Data models
-│   │   │   └── schemas.py       # Pydantic request/response schemas
-│   │   ├── services/            # Business logic
-│   │   │   ├── rule_engine.py   # Core evaluation engine (418 lines)
-│   │   │   ├── rule_loader.py   # JSON rule file management
-│   │   │   └── weather_service.py # Weather API integration
-│   │   └── main.py              # Application entry point
-│   ├── Dockerfile               # Production container build
-│   ├── requirements.txt         # Python dependencies
-│   └── .env.example             # Environment variable template
-│
-├── frontend/                    # Next.js TypeScript frontend
-│   ├── app/
-│   │   ├── layout.tsx           # Root layout with metadata
-│   │   ├── page.tsx             # Landing page
-│   │   ├── globals.css          # Global styles and design system
-│   │   ├── recommendations/     # Recommendation wizard
-│   │   │   └── page.tsx         # 4-step recommendation flow
-│   │   ├── farm/                # Farm profile management
-│   │   │   └── page.tsx         # Farm settings page
-│   │   └── chatbot/             # AI chat interface
-│   │       └── page.tsx         # Chatbot page
-│   ├── components/              # React components
-│   │   ├── Header.tsx           # Navigation header
-│   │   ├── Footer.tsx           # Footer links
-│   │   ├── FarmTypeCard.tsx     # Farm type selector
-│   │   ├── WeatherInput.tsx     # Weather input form
-│   │   ├── RecommendationCard.tsx # Recommendation display
-│   │   ├── DailySchedule.tsx    # Task schedule view
-│   │   └── ChatWidget.tsx       # Floating chat widget
-│   ├── lib/
-│   │   └── api.ts               # TypeScript API client
-│   ├── Dockerfile               # Production container build
-│   ├── package.json             # Node.js dependencies
-│   ├── tailwind.config.js       # TailwindCSS configuration
-│   ├── tsconfig.json            # TypeScript configuration
-│   └── .env.example             # Environment variable template
-│
-├── docs/
-│   └── screenshots/             # UI screenshots (7 images)
-│
-├── .env.example                 # Root environment template
-├── .gitignore                   # Git ignore patterns
-└── README.md                    # This file
-```
-
-### Rule Evaluation Architecture
-
-```mermaid
-flowchart TD
-    Start([API Request]) --> LoadRules[Load Farm-Specific Rules]
-    LoadRules --> BuildContext[Build Context Dictionary]
-
-    BuildContext --> Context{Extract Context}
-    Context -->|Weather| W[Temperature, Humidity, Rainfall]
-    Context -->|Soil| S[Moisture, pH, Nutrients]
-    Context -->|Crop| C[Type, Stage, Days Since Irrigation]
-    Context -->|Livestock| L[Animal Type, Health, Vaccination]
-
-    W --> Evaluate
-    S --> Evaluate
-    C --> Evaluate
-    L --> Evaluate
-
-    Evaluate[For Each Rule] --> CheckEnabled{Rule Enabled?}
-    CheckEnabled -->|No| Skip[Skip Rule]
-    CheckEnabled -->|Yes| CheckApplicable{Applicable to Context?}
-
-    CheckApplicable -->|No| Skip
-    CheckApplicable -->|Yes| EvalConditions[Evaluate Conditions]
-
-    EvalConditions --> Operator{Condition Operator}
-    Operator -->|AND| AllTrue{All True?}
-    Operator -->|OR| AnyTrue{Any True?}
-
-    AllTrue -->|Yes| Match[Rule Matched]
-    AllTrue -->|No| Skip
-    AnyTrue -->|Yes| Match
-    AnyTrue -->|No| Skip
-
-    Match --> BuildAction[Build Recommendation]
-    BuildAction --> Template[Process Message Template]
-    Template --> Urgency[Calculate Urgency Score]
-
-    Skip --> NextRule{More Rules?}
-    Urgency --> NextRule
-
-    NextRule -->|Yes| Evaluate
-    NextRule -->|No| SortByUrgency[Sort by Urgency]
-
-    SortByUrgency --> GroupPriority[Group by Priority]
-    GroupPriority --> Critical[Critical: 90-100]
-    GroupPriority --> High[High: 70-89]
-    GroupPriority --> Medium[Medium: 40-69]
-    GroupPriority --> Low[Low: 0-39]
-
-    Critical --> Schedule
-    High --> Schedule
-    Medium --> Schedule
-    Low --> Schedule
-
-    Schedule[Generate Daily Schedule] --> MapTime[Map to Time Slots]
-    MapTime --> Summary[Generate Summary]
-    Summary --> Return([Return JSON Response])
-
-    style Start fill:#c8e6c9
-    style LoadRules fill:#fff59d
-    style Evaluate fill:#ffccbc
-    style Match fill:#a5d6a7
-    style Critical fill:#ef5350
-    style High fill:#ff9800
-    style Medium fill:#fdd835
-    style Low fill:#42a5f5
-    style Return fill:#9575cd
-```
-
----
-
-## Local Development
-
-### Prerequisites
-
-- **Backend**: Python 3.10+
-- **Frontend**: Node.js 20+, npm 9+
-- **API Key**: Google Gemini API key (free tier available)
-
-### Backend Setup
+#### Netlify
 
 ```bash
-# 1. Create environment file in project root
-cd rule_based_system  # Project root directory
-cp .env.example .env
+# Install Netlify CLI
+npm i -g netlify-cli
 
-# 2. Edit .env and add your Gemini API key
-# GEMINI_API_KEY=your_api_key_here
-
-# 3. Install Python dependencies
-cd backend
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# 4. Start development server
-python3 -m uvicorn app.main:app --reload --port 8000
-```
-
-**Backend will run at**: http://localhost:8000
-**API Docs**: http://localhost:8000/docs
-
-**Important**: The `.env` file must be in the project root directory (not in `backend/`).
-
-### Frontend Setup
-
-```bash
+# Navigate to frontend
 cd frontend
 
-# Install dependencies
-npm install
+# Build
+npm run build
 
-# Create environment file
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
-
-# Start development server
-npm run dev
+# Deploy
+netlify deploy --prod --dir=.next
 ```
 
-**Frontend will run at**: http://localhost:3000
-
----
-
-## Configuration
-
-### Environment Variables
-
-#### Backend (`.env` in project root)
+#### Self-Hosted (Docker)
 
 ```bash
-# REQUIRED - Google Gemini AI API Key
-GEMINI_API_KEY=your_gemini_api_key_here
+# Build Docker image
+docker build -t agricultural-advisory-frontend .
 
-# Required for production
-CORS_ORIGINS=https://your-frontend-domain.com
-
-# Optional - Development mode
-DEBUG=False  # Set to True for verbose logging
+# Run container
+docker run -p 3000:3000 \
+  -e NEXT_PUBLIC_API_URL=https://your-backend-url.com \
+  agricultural-advisory-frontend
 ```
 
-**Obtaining Gemini API Key**:
-1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Create a new API key (free tier available)
-3. Copy and add to `.env` file
+### Environment Variables for Production
 
-#### Frontend (`.env.local` in frontend directory)
+| Variable | Required | Example | Description |
+|----------|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | ✅ Yes | `https://rule-based-system.onrender.com` | Backend API base URL |
 
-```bash
-# Backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:8000  # Local development
-# NEXT_PUBLIC_API_URL=https://your-backend.onrender.com  # Production
-```
-
-**Note**: Next.js environment variables must be prefixed with `NEXT_PUBLIC_` to be accessible in the browser.
+⚠️ **Important**: All Next.js environment variables that need to be accessible in the browser MUST be prefixed with `NEXT_PUBLIC_`.
 
 ---
 
-## Testing
+## 📚 Additional Resources
 
-### API Testing with cURL
-
-```bash
-# Health check
-curl https://rule-based-system.onrender.com/health
-
-# Get system statistics
-curl https://rule-based-system.onrender.com/api/v1/stats
-
-# Generate recommendations
-curl -X POST https://rule-based-system.onrender.com/api/v1/recommendations \
-  -H "Content-Type: application/json" \
-  -d '{
-    "farm_type": "wheat",
-    "region": "aran",
-    "weather": {
-      "temperature": 35,
-      "humidity": 80,
-      "rainfall_last_24h": 0
-    },
-    "soil": {
-      "soil_moisture": 45
-    },
-    "crop_context": {
-      "crop_type": "wheat",
-      "stage": "heading",
-      "days_since_irrigation": 5,
-      "days_since_fertilization": 25
-    }
-  }'
-```
-
-### API Testing with Python
-
-```python
-import requests
-
-url = "https://rule-based-system.onrender.com/api/v1/recommendations"
-payload = {
-    "farm_type": "wheat",
-    "region": "aran",
-    "weather": {
-        "temperature": 35,
-        "humidity": 80,
-        "rainfall_last_24h": 0
-    },
-    "soil": {"soil_moisture": 45},
-    "crop_context": {
-        "crop_type": "wheat",
-        "stage": "heading",
-        "days_since_irrigation": 5,
-        "days_since_fertilization": 25
-    }
-}
-
-response = requests.post(url, json=payload)
-print(response.json())
-```
+- [Main README](../README.md) - Full project documentation
+- [Backend README](../backend/README.md) - Backend API documentation
+- [Next.js Documentation](https://nextjs.org/docs)
+- [TailwindCSS Documentation](https://tailwindcss.com/docs)
+- [Vercel Deployment Guide](https://vercel.com/docs)
 
 ---
 
-## Troubleshooting
-
-### Common Issues
-
-#### 1. Frontend Cannot Reach Backend
-
-**Error**: CORS or connection errors in browser console
-
-**Solution**:
-- Verify `NEXT_PUBLIC_API_URL` is set correctly in Vercel/Netlify
-- Check backend is running: visit `/health` endpoint
-- Update `CORS_ORIGINS` in backend to include frontend domain
-- Wait for Render free tier to wake up (4-5 minutes on first request)
-
-#### 2. Chatbot Not Working
-
-**Error**: "Chatbot unavailable" or empty responses
-
-**Solution**:
-- Verify `GEMINI_API_KEY` is set in backend environment
-- Check API key is valid at [Google AI Studio](https://aistudio.google.com/app/apikey)
-- Review backend logs for authentication errors
-
-#### 3. No Recommendations Returned
-
-**Error**: "No recommendations found" despite valid input
-
-**Solution**:
-- Ensure crop type and growth stage are selected
-- Verify weather and soil values are realistic
-- Check browser console for request/response details
-- Review backend logs for rule evaluation errors
-
-#### 4. Slow First Request (Render Free Tier)
-
-**Issue**: First API request takes 4-5 minutes
-
-**Explanation**: Render free tier sleeps after 15 minutes of inactivity.
-
-**Solutions**:
-- Wait for initial wake-up (normal behavior)
-- Upgrade to Render Starter plan ($7/month) for instant response
-- Implement keep-alive ping (cron job hitting `/health` every 10 minutes)
-
----
-
-## License
-
-This project is licensed under the MIT License. See LICENSE file for details.
-
----
-
-## Support
-
-- **API Documentation**: https://rule-based-system.onrender.com/docs
-- **Health Endpoint**: https://rule-based-system.onrender.com/health
-- **Issues**: Use GitHub Issues for bug reports and feature requests
-
----
-
-**Built for agricultural stakeholders seeking data-driven farming decisions**
