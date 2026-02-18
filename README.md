@@ -132,7 +132,7 @@ stateDiagram-v2
     Step1 --> Step2: Farm selected
 
     state Step2 {
-        [*] --> AutoFetch: Option: Auto-fetch weather
+        [*] --> AutoFetch: Option - Auto-fetch weather
         AutoFetch --> WeatherForm: Manual or auto-filled
         WeatherForm --> EnterWeather: Temperature, Humidity, Rainfall
         EnterWeather --> EnterSoil: Soil Moisture, pH
@@ -202,10 +202,10 @@ stateDiagram-v2
 ```mermaid
 graph LR
     subgraph "Routes"
-        R1[/ - Landing Page]
-        R2[/recommendations - Wizard]
-        R3[/farm - Farm Profile]
-        R4[/chatbot - AI Chat]
+        R1["/ - Landing Page"]
+        R2["/recommendations - Wizard"]
+        R3["/farm - Farm Profile"]
+        R4["/chatbot - AI Chat"]
     end
 
     subgraph "Landing Components"
@@ -223,10 +223,10 @@ graph LR
     end
 
     subgraph "Backend API Calls"
-        A1[GET /api/v1/farms]
-        A2[GET /api/v1/weather/auto]
-        A3[POST /api/v1/recommendations]
-        A4[POST /api/v1/chat/message]
+        A1["GET /api/v1/farms"]
+        A2["GET /api/v1/weather/auto"]
+        A3["POST /api/v1/recommendations"]
+        A4["POST /api/v1/chat/message"]
     end
 
     R1 --> Hero
