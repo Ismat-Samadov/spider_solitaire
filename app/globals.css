@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --card-h: 90px;
+  --card-offset-up: 28px;
+  --card-offset-down: 14px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --card-h: 70px;
+    --card-offset-up: 22px;
+    --card-offset-down: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --card-h: 58px;
+    --card-offset-up: 18px;
+    --card-offset-down: 9px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0a1f14;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a1f14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff8840;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff8870;
+}
+
+/* Prevent text selection during card interaction */
+.select-none {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Smooth font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
