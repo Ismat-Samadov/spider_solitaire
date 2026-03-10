@@ -139,7 +139,8 @@ export function moveCards(
 ): GameState {
   const movingCards = state.columns[fromColIdx].cards.slice(fromCardIdx);
   if (movingCards.length === 0 || !canMoveCards(movingCards, state.columns[toColIdx])) {
-    return { ...state, selection: null };
+    // Keep selection intact on invalid move — don't deselect
+    return state;
   }
 
   const history = [...state.history, saveHistory(state)];
@@ -259,6 +260,55 @@ export function handleColumnClick(state: GameState, columnIndex: number): GameSt
 
   // Move cards to this column
   return moveCards(state, state.selection.columnIndex, state.selection.cardIndex, columnIndex);
+}
+
+// Returns all column indices where the selected cards can be legally placed
+export function getValidTargets(state: GameState): number[] {
+  if (!state.selection) return [];
+  const { columnIndex: fromCol, cardIndex: fromCard } = state.selection;
+  const movingCards = state.columns[fromCol].cards.slice(fromCard);
+  const targets: number[] = [];
+  for (let toCol = 0; toCol < state.columns.length; toCol++) {
+    if (toCol === fromCol) continue;
+    if (canMoveCards(movingCards, state.columns[toCol])) targets.push(toCol);
+  }
+  return targets;
+}
+
+// Find the first valid move in the game (for hint)
+export interface HintMove { fromCol: number; fromCard: number; toCol: number }
+export function findHint(state: GameState): HintMove | null {
+  // Prefer same-suit moves
+  for (let fromCol = 0; fromCol < state.columns.length; fromCol++) {
+    const column = state.columns[fromCol];
+    for (let cardIdx = column.cards.length - 1; cardIdx >= 0; cardIdx--) {
+      if (getMoveableFrom(column, cardIdx) === null) continue;
+      const movingCards = column.cards.slice(cardIdx);
+      // Prefer moves that expose a face-down card
+      const exposesHidden = cardIdx > 0 && !column.cards[cardIdx - 1].faceUp;
+      for (let toCol = 0; toCol < state.columns.length; toCol++) {
+        if (toCol === fromCol) continue;
+        if (canMoveCards(movingCards, state.columns[toCol])) {
+          if (exposesHidden) return { fromCol, fromCard: cardIdx, toCol };
+        }
+      }
+    }
+  }
+  // Any valid move
+  for (let fromCol = 0; fromCol < state.columns.length; fromCol++) {
+    const column = state.columns[fromCol];
+    for (let cardIdx = column.cards.length - 1; cardIdx >= 0; cardIdx--) {
+      if (getMoveableFrom(column, cardIdx) === null) continue;
+      const movingCards = column.cards.slice(cardIdx);
+      for (let toCol = 0; toCol < state.columns.length; toCol++) {
+        if (toCol === fromCol) continue;
+        if (canMoveCards(movingCards, state.columns[toCol])) {
+          return { fromCol, fromCard: cardIdx, toCol };
+        }
+      }
+    }
+  }
+  return null;
 }
 
 // Check if game is stuck (no valid moves and no stock left)

@@ -10,10 +10,12 @@ interface GameHeaderProps {
   difficulty: Difficulty;
   historyLength: number;
   soundEnabled: boolean;
+  hasHint: boolean;
   onUndo: () => void;
   onPause: () => void;
   onNewGame: () => void;
   onToggleSound: () => void;
+  onHint: () => void;
 }
 
 export function GameHeader({
@@ -24,10 +26,12 @@ export function GameHeader({
   difficulty,
   historyLength,
   soundEnabled,
+  hasHint,
   onUndo,
   onPause,
   onNewGame,
   onToggleSound,
+  onHint,
 }: GameHeaderProps) {
   const difficultyStyle =
     difficulty === 'easy'
@@ -63,22 +67,30 @@ export function GameHeader({
       </div>
 
       {/* Right: controls */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1.5 flex-wrap">
         <Button
           variant="ghost"
           size="sm"
           onClick={onToggleSound}
           title={soundEnabled ? 'Mute sound' : 'Enable sound'}
-          aria-label={soundEnabled ? 'Mute sound' : 'Enable sound'}
         >
           {soundEnabled ? '🔊' : '🔇'}
         </Button>
         <Button
           variant="secondary"
           size="sm"
+          onClick={onHint}
+          disabled={!hasHint}
+          title="Show a hint (H key)"
+        >
+          💡 Hint
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={onUndo}
           disabled={historyLength === 0}
-          title="Undo last move (-5 pts)"
+          title="Undo (U key) — costs 5 pts"
         >
           ↩ Undo
         </Button>
@@ -86,11 +98,11 @@ export function GameHeader({
           variant="secondary"
           size="sm"
           onClick={onPause}
-          title={status === 'paused' ? 'Resume game' : 'Pause game'}
+          title={status === 'paused' ? 'Resume (P)' : 'Pause (P)'}
         >
-          {status === 'paused' ? '▶ Resume' : '⏸ Pause'}
+          {status === 'paused' ? '▶ Resume' : '⏸'}
         </Button>
-        <Button variant="secondary" size="sm" onClick={onNewGame} title="Start new game">
+        <Button variant="secondary" size="sm" onClick={onNewGame} title="New game (N)">
           ↺ New
         </Button>
       </div>

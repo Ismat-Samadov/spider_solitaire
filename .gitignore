@@ -1,2 +1,4 @@
 .claude
 .next
+node_modules
+dist
